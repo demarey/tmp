@@ -35,5 +35,7 @@ jobs:
           ls -R
 
       - name: image version determination
-        run: ./pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st
+        run: |
+          ./pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st
+          cat pharo.version
 
