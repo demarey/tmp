@@ -18,6 +18,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
       - name: get pharo 90 image
         run: | 
           curl get.pharo.org/64/90 | bash
@@ -30,5 +35,5 @@ jobs:
           ls -R
 
       - name: image version determination
-        run: ./pharo --nodisplay Pharo.image --no-default-preferences eval '1 + 1'
+        run: ./pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st
 
