@@ -36,6 +36,7 @@ jobs:
 
       - name: image version determination
         run: |
-          ./pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st
+          pwd
+          bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st'
           cat pharo.version
 
