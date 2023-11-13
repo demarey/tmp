@@ -31,12 +31,15 @@ jobs:
       - name: get pharo 68021 (pharo 7.0)
         run: | 
           wget https://files.pharo.org/get-files/70/pharo64-linux-stable.zip
-          unzip pharo64-linux-stable.zip
+          mkdir vm
+          cd vm
+          unzip ../pharo64-linux-stable.zip .
+          cd ,,
           ls -R
 
       - name: image version determination
         run: |
           pwd
-          bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st'
+          bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./vm/pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st'
           cat pharo.version
 
