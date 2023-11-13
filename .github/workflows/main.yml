@@ -26,7 +26,7 @@ jobs:
       - name: get pharo 68021 (pharo 7.0)
         run: | 
           wget https://files.pharo.org/get-files/70/pharo64-linux-stable.zip
-          unzip 
+          unzip pharo64-linux-stable.zip
           ls -R
 
       - name: image version determination
