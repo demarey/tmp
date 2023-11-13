@@ -33,7 +33,7 @@ jobs:
           wget https://files.pharo.org/get-files/70/pharo64-linux-stable.zip
           mkdir vm
           cd vm
-          unzip ../pharo64-linux-stable.zip .
+          unzip ../pharo64-linux-stable.zip
           cd ,,
           ls -R
 
