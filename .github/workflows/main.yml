@@ -41,7 +41,7 @@ jobs:
           mkdir vm
           cd vm
           unzip ../pharo64-linux-stable.zip
-          cd ,,
+          cd ..
           ls -R
 
       - name: image version determination
