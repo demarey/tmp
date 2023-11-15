@@ -19,10 +19,17 @@ jobs:
     steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          path: ressources
       
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: pharo-project/pharo-launcher
+          path: pharo-launcher
+
       - name: get pharo 90 image
         run: | 
           curl get.pharo.org/64/90 | bash
@@ -40,6 +47,6 @@ jobs:
       - name: image version determination
         run: |
           pwd
-          bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./vm/pharo --nodisplay Pharo.image --no-default-preferences pharo-version.st'
+          bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./vm/pharo --nodisplay Pharo.image --no-default-preferences ressources/pharo-version.st'
           cat pharo.version
 
