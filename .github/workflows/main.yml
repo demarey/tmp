@@ -28,25 +28,50 @@ jobs:
         with:
           fetch-depth: 0
           repository: pharo-project/pharo-launcher
+          ref: debug
           path: pharo-launcher
 
-      - name: get pharo 90 image
-        run: | 
-          curl get.pharo.org/64/90 | bash
-          ls -R
+      # - name: get pharo 90 image
+      #   run: | 
+      #     curl get.pharo.org/64/90 | bash
+      #     ls -R
 
-      - name: get pharo 68021 (pharo 7.0)
-        run: | 
-          wget https://files.pharo.org/get-files/70/pharo64-linux-stable.zip
-          mkdir vm
-          cd vm
-          unzip ../pharo64-linux-stable.zip
-          cd ..
-          ls -R
+      # - name: get pharo 68021 (pharo 7.0)
+      #   run: | 
+      #     wget https://files.pharo.org/get-files/70/pharo64-linux-stable.zip
+      #     mkdir vm
+      #     cd vm
+      #     unzip ../pharo64-linux-stable.zip
+      #     cd ..
+      #     ls -R
 
-      - name: image version determination
+      # - name: image version determination
+      #   run: |
+      #     pwd
+      #     bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./vm/pharo --nodisplay Pharo.image --no-default-preferences ressources/pharo-version.st'
+      #     cat pharo.version
+
+      - name: prepare PL image
         run: |
-          pwd
-          bash -c 'cd "." && export SQUEAK_PLUGINS="" && ./vm/pharo --nodisplay Pharo.image --no-default-preferences ressources/pharo-version.st'
-          cat pharo.version
+          cd pharo-launcher
+          wget --quiet -O - get.pharo.org/64/110 | bash
+          wget --quiet -O - get.pharo.org/64/vm110 | bash
+          echo '110' > 'pharo.version'
+        
+          ./pharo Pharo.image save PharoLauncher --delete-old
+          ./pharo PharoLauncher.image eval --save "Metacello new baseline: 'PharoLauncher'; repository: 'gitlocal://src'; ignoreImage; onConflictUseIncoming; onWarning: [:ex | ex load]; load"
 
+      - name: run PL tests
+        run: |
+          cd pharo-launcher
+          ./pharo PharoLauncher.image test --junit-xml-output "PharoLauncher.*"
+
+      - name: Test report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: Pharo Launcher Tests        # Name of the check run which will be created
+          path: ./*.xml                     # Path to test results
+          reporter: java-junit              # Format of test results
+          working-directory: ./pharo-launcher
+  
