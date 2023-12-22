@@ -64,7 +64,7 @@ jobs:
       - name: run PL tests
         run: |
           cd pharo-launcher
-          ./pharo PharoLauncher.image test --junit-xml-output "PharoLauncher-Tests-Functional-Debug"
+          ./pharo PharoLauncher.image test --junit-xml-output 'PharoLauncher.*' # 'PharoLauncher-Tests-Functional-Debug'
 
       - uses: actions/upload-artifact@v3  # upload test results
         if: success() || failure()        # run this step even if previous step failed
